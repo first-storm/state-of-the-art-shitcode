@@ -71,8 +71,8 @@ const int cdr = 700;
 _坏的 👎🏻_
 
 ```c
-// 700ms 的数字是基于 UX A/B 测试结果经验性地计算出来的。
-// @see: <链接到实验或相关 JIRA 任务或详细解释 700 的内容>
+// The number 700ms is empirically calculated based on UX A/B test results.
+// @see: <link to the experiment or relevant JIRA task or detailed explanation of 700>
 const int callbackDebounceRate = 700;
 ```
 
@@ -168,7 +168,7 @@ int square(int x) {
 
 int main() {
     x = square(x);
-    // 现在 x 是 25。
+    // Now x is 25.
 }
 ```
 
@@ -220,7 +220,7 @@ int square(int num) {
     } else {
         return num * num;
     }
-    return -1; // 这是我的“计划 B”。
+    return -1; // This is my "Plan B".
 }
 ```
 
