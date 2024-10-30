@@ -4,6 +4,8 @@
 
 This a list of state-of-the-art shitcode principles your project should follow to call it a proper shitcode.
 
+This is the fork for C.
+
 _Read this in other languages:_
 [_简体中文_](README.zh-CN.md),
 [_한국어_](README.ko-KR.md)
@@ -28,14 +30,14 @@ Fewer keystrokes, more time for you.
 
 _Good 👍🏻_
 
-```javascript
-let a = 42;
+```c
+int a = 42;
 ```
 
 _Bad 👎🏻_
 
-```javascript
-let age = 42;
+```c
+int age = 42;
 ```
 
 ### 💩 Mix variable/functions naming style
@@ -44,16 +46,16 @@ Celebrate the difference.
 
 _Good 👍🏻_
 
-```javascript
-let wWidth = 640;
-let w_height = 480;
+```c
+int wWidth = 640;
+int w_height = 480;
 ```
 
 _Bad 👎🏻_
 
-```javascript
-let windowWidth = 640;
-let windowHeight = 480;
+```c
+int windowWidth = 640;
+int windowHeight = 480;
 ```
 
 ### 💩 Never write comments
@@ -62,18 +64,18 @@ No one is going to read your code anyway.
 
 _Good 👍🏻_
 
-```javascript
-const cdr = 700;
+```c
+const int cdr = 700;
 ```
 
 _Bad 👎🏻_
 
 More often comments should contain some 'why' and not some 'what'. If the 'what' is not clear in the code, the code is probably too messy.
 
-```javascript
+```c
 // The number of 700ms has been calculated empirically based on UX A/B test results.
 // @see: <link to experiment or to related JIRA task or to something that explains number 700 in details>
-const callbackDebounceRate = 700;
+const int callbackDebounceRate = 700;
 ```
 
 ### 💩 Always write comments in your native language
@@ -82,14 +84,14 @@ If you violated the "No comments" principle then at least try to write comments 
 
 _Good 👍🏻_
 
-```javascript
+```c
 // Закриваємо модальне віконечко при виникненні помилки.
 toggleModal(false);
 ```
 
 _Bad 👎🏻_
 
-```javascript
+```c
 // Hide modal window on error.
 toggleModal(false);
 ```
@@ -100,39 +102,32 @@ Celebrate the difference.
 
 _Good 👍🏻_
 
-```javascript
-let i = ['tomato', 'onion', 'mushrooms'];
-let d = [ "ketchup", "mayonnaise" ];
+```c
+char ingredients[] = "tomato";
+char* dressing = "mayonnaise";
 ```
 
 _Bad 👎🏻_
 
-```javascript
-let ingredients = ['tomato', 'onion', 'mushrooms'];
-let dressings = ['ketchup', 'mayonnaise'];
+```c
+char* ingredients = "tomato";
+char* dressing = "mayonnaise";
 ```
 
 ### 💩 Put as much code as possible into one line
 
 _Good 👍🏻_
 
-```javascript
-document.location.search.replace(/(^\?)/,'').split('&').reduce(function(o,n){n=n.split('=');o[n[0]]=n[1];return o},{})
+```c
+for(int i=0;i<10;i++){printf("%d",i);}
 ```
 
 _Bad 👎🏻_
 
-```javascript
-document.location.search
-  .replace(/(^\?)/, '')
-  .split('&')
-  .reduce((searchParams, keyValuePair) => {
-    keyValuePair = keyValuePair.split('=');
-    searchParams[keyValuePair[0]] = keyValuePair[1];
-    return searchParams;
-  },
-  {}
-)
+```c
+for (int i = 0; i < 10; i++) {
+    printf("%d", i);
+}
 ```
 
 ### 💩 Fail silently
@@ -141,23 +136,22 @@ Whenever you catch an error it is not necessary for anyone to know about it. No 
 
 _Good 👍🏻_
 
-```javascript
-try {
-  // Something unpredictable.
-} catch (error) {
-  // tss... 🤫
+```c
+void doSomething() {
+    // Something unpredictable.
 }
 ```
 
 _Bad 👎🏻_
 
-```javascript
-try {
-  // Something unpredictable.
-} catch (error) {
-  setErrorMessage(error.message);
-  // and/or
-  logError(error);
+```c
+void doSomething() {
+    // Something unpredictable.
+    if (error_occurred) {
+        logError();
+        // And/Or
+        showErrorMessage();
+    }
 }
 ```
 
@@ -167,26 +161,30 @@ Globalization principle.
 
 _Good 👍🏻_
 
-```javascript
-let x = 5;
+```c
+int x = 5;
 
-function square() {
-  x = x ** 2;
+int square(int x) {
+    return x * x;
 }
 
-square(); // Now x is 25.
+int main() {
+    x = square(x);
+    // Now x is 25.
+}
 ```
 
 _Bad 👎🏻_
 
-```javascript
-let x = 5;
-
-function square(num) {
-  return num ** 2;
+```c
+int square(int x) {
+    return x * x;
 }
 
-x = square(x); // Now x is 25.
+int main() {
+    int x = 5;
+    x = square(x);
+}
 ```
 
 ### 💩 Create variables that you're not going to use.
@@ -195,49 +193,20 @@ Just in case.
 
 _Good 👍🏻_
 
-```javascript
-function sum(a, b, c) {
-  const timeout = 1300;
-  const result = a + b;
-  return a + b;
+```c
+int sum(int a, int b, int c) {
+    int timeout = 1300;
+    int result = a + b;
+    return a + b;
 }
 ```
 
 _Bad 👎🏻_
 
-```javascript
-function sum(a, b) {
-  return a + b;
+```c
+int sum(int a, int b) {
+    return a + b;
 }
-```
-
-### 💩 Don't specify types and/or don't do type checks if language allows you to do so.
-
-_Good 👍🏻_
-
-```javascript
-function sum(a, b) {
-  return a + b;
-}
-
-// Having untyped fun here.
-const guessWhat = sum([], {}); // -> "[object Object]"
-const guessWhatAgain = sum({}, []); // -> 0
-```
-
-_Bad 👎🏻_
-
-```javascript
-function sum(a: number, b: number): ?number {
-  // Covering the case when we don't do transpilation and/or Flow type checks in JS.
-  if (typeof a !== 'number' && typeof b !== 'number') {
-    return undefined;
-  }
-  return a + b;
-}
-
-// This one should fail during the transpilation/compilation.
-const guessWhat = sum([], {}); // -> undefined
 ```
 
 ### 💩 You need to have an unreachable piece of code
@@ -246,26 +215,25 @@ This is your "Plan B".
 
 _Good 👍🏻_
 
-```javascript
-function square(num) {
-  if (typeof num === 'undefined') {
-    return undefined;
-  }
-  else {
-    return num ** 2;
-  }
-  return null; // This is my "Plan B".
+```c
+int square(int num) {
+    if (num == 0) {
+        return 0;
+    } else {
+        return num * num;
+    }
+    return -1; // This is my "Plan B".
 }
 ```
 
 _Bad 👎🏻_
 
-```javascript
-function square(num) {
-  if (typeof num === 'undefined') {
-    return undefined;
-  }
-  return num ** 2;
+```c
+int square(int num) {
+    if (num == 0) {
+        return 0;
+    }
+    return num * num;
 }
 ```
 
@@ -275,40 +243,34 @@ Be like a bird - nest, nest, nest.
 
 _Good 👍🏻_
 
-```javascript
-function someFunction() {
-  if (condition1) {
-    if (condition2) {
-      asyncFunction(params, (result) => {
-        if (result) {
-          for (;;) {
+```c
+void someFunction() {
+    if (condition1) {
+        if (condition2) {
             if (condition3) {
+                for (;;) {
+                    if (condition4) {
+                        // Do something.
+                    }
+                }
             }
-          }
         }
-      })
     }
-  }
 }
 ```
 
 _Bad 👎🏻_
 
-```javascript
-async function someFunction() {
-  if (!condition1 || !condition2) {
-    return;
-  }
-  
-  const result = await asyncFunction(params);
-  if (!result) {
-    return;
-  }
-  
-  for (;;) {
-    if (condition3) {
+```c
+void someFunction() {
+    if (!condition1 || !condition2 || !condition3) {
+        return;
     }
-  }
+    for (;;) {
+        if (condition4) {
+            // Do something.
+        }
+    }
 }
 ```
 
@@ -318,53 +280,52 @@ Avoid indentations since they make complex code take up more space in the editor
 
 _Good 👍🏻_
 
-```javascript
-const fruits = ['apple',
-  'orange', 'grape', 'pineapple'];
-  const toppings = ['syrup', 'cream', 
-                    'jam', 
-                    'chocolate'];
-const desserts = [];
-fruits.forEach(fruit => {
-toppings.forEach(topping => {
-    desserts.push([
-fruit,topping]);
-    });})
+```c
+#include<stdio.h>
+
+int main() {
+    char *fruits[] = {
+    "apple", "orange",
+        "grape", "pineapple"
+};
+        char *toppings[] = {
+            "syrup","cream", "jam", "chocolate"
+};char desserts[16][50];
+int count = 0;
+        int i = 0,
+                j = 0;
+for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+sprintf(desserts[count],
+"%s with %s", fruits[i], toppings[j]);
+printf("%s\n", desserts[count]);
+count++;}}
+    return 0;
+    }
 ```
 
 _Bad 👎🏻_
 
-```javascript
-const fruits = ['apple', 'orange', 'grape', 'pineapple'];
-const toppings = ['syrup', 'cream', 'jam', 'chocolate'];
-const desserts = [];
+```c
+#include <stdio.h>
 
-fruits.forEach(fruit => {
-  toppings.forEach(topping => {
-    desserts.push([fruit, topping]); 
-  });
-})
-```
-
-### 💩 Do not lock your dependencies
-
-Update your dependencies on each new installation in uncontrolled way. Why stick to the past, let's use the cutting edge libraries versions.
-
-_Good 👍🏻_
-
-```
-$ ls -la
-
-package.json
-```
-
-_Bad 👎🏻_
-
-```
-$ ls -la
-
-package.json
-package-lock.json
+int main() {
+    char *fruits[] = {"apple", "orange", "grape", "pineapple"};
+    char *toppings[] = {"syrup", "cream", "jam", "chocolate"};
+    char desserts[16][50];
+    int count = 0;
+    int i = 0, j = 0;
+    
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            sprintf(desserts[count], "%s with %s", fruits[i], toppings[j]);
+            printf("%s\n", desserts[count]);
+            count++;
+        }
+    }
+    
+    return 0;
+}
 ```
 
 ### 💩 Always name your boolean value a `flag`
@@ -373,24 +334,24 @@ Leave the space for your colleagues to think what the boolean value means.
 
 _Good 👍🏻_
 
-```javascript
-let flag = true;
+```c
+int flag = true;
 ```
 
 _Bad 👎🏻_
 
-```javascript
-let isDone = false;
-let isEmpty = false;
+```c
+int isDone = false;
+int isEmpty = false;
 ```
 
 ### 💩 Long-read functions are better than short ones.
 
 Don't divide a program logic into readable pieces. What if your IDE's search breaks and you will not be able to find the necessary file or function?
 
-- 10000 lines of code in one file is OK.
+- 10000 lines of code in one .c file is OK.
 - 1000 lines of a function body is OK.
-- Dealing with many services (3rd party and internal, also, there are some helpers, database hand-written ORM and jQuery slider) in one `service.js`? It's OK.
+- Handling multiple libraries (standard and custom, also, there are some macros, manual memory management, and custom string manipulation) in one service.c? It's OK.
 
 ### 💩 Avoid covering your code with tests
 
